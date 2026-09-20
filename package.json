@@ -1,0 +1,11 @@
+{
+  "name": "juliette-electron-theme",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Design system Vue + shadcn-vue extraído do layout do tessera-poc, para os apps pink-brain",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev:web": "npm run dev -w apps/web",
+    "dev:electron": "npm run dev -w apps/electron"
+  }
+}
