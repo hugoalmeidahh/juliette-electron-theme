@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juliette-electron-theme — vanilla HTML/JS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="titlebar">
+        <div class="titlebar-title">Arquivos</div>
+        <button class="titlebar-search" id="open-palette" type="button">🔍 Arquivos</button>
+        <div class="titlebar-controls">
+          <button class="titlebar-btn" id="btn-min" title="Minimizar">&#x2013;</button>
+          <button class="titlebar-btn" id="btn-max" title="Maximizar">&#x25A1;</button>
+          <button class="titlebar-btn titlebar-btn-close" id="btn-close" title="Fechar">&#x2715;</button>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <div class="toolbar-cell" id="toolbar-sidebar-cell" style="width: 220px">
+          <button class="icon-btn" id="toggle-sidebar" title="Ocultar pastas">&#9776;</button>
+        </div>
+        <div class="resize-handle" data-resize="sidebar"></div>
+        <div class="toolbar-cell toolbar-list-cell" id="toolbar-list-cell" style="width: 268px">
+          <span class="toolbar-label">Todos Arquivos</span>
+          <label class="search-field">
+            <span>&#128269;</span>
+            <input type="search" id="search-input" placeholder="Buscar no cofre" autocomplete="off" />
+          </label>
+          <div class="split-button">
+            <button class="icon-btn" id="new-file-btn" title="Novo arquivo Markdown">+</button>
+            <button class="icon-btn split-caret" id="new-file-caret" title="Tipo de arquivo">&#9662;</button>
+            <div class="dropdown-menu hidden" id="new-file-menu">
+              <button data-format="md">&#128196; Markdown (.md)</button>
+              <button data-format="txt">&#128196; Texto (.txt)</button>
+              <button data-format="html">&lt;/&gt; HTML (.html)</button>
+              <button data-format="db">&#128451; Base de dados</button>
+              <button data-format="draw">&#9998; Desenho</button>
+              <hr />
+              <button data-action="import">&#8593; Importar arquivos…</button>
+            </div>
+          </div>
+        </div>
+        <div class="resize-handle" data-resize="list"></div>
+        <div class="toolbar-cell toolbar-editor-cell">
+          <div class="segmented" id="segmented">
+            <button class="segmented-item active" data-view="edit">Editar</button>
+            <button class="segmented-item" data-view="preview">Preview</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="icon-btn" id="toggle-chat" title="Chat com IA">&#128172;</button>
+            <button class="icon-btn" id="toggle-details" title="Detalhes do arquivo">&#8505;</button>
+            <button class="icon-btn" id="open-settings" title="Configurações">&#9881;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="workspace">
+        <aside class="pane pane-sidebar" id="pane-sidebar" style="width: 220px">
+          <div class="sidebar-section">
+            <div class="sidebar-section-label">Pastas</div>
+            <div id="folder-tree" class="folder-tree"></div>
+          </div>
+        </aside>
+        <div class="resize-handle" data-resize="sidebar"></div>
+
+        <section class="pane pane-list" id="pane-list" style="width: 268px">
+          <div id="file-list" class="file-list"></div>
+        </section>
+        <div class="resize-handle" data-resize="list"></div>
+
+        <main class="pane pane-editor">
+          <div id="editor-tabs" class="editor-tabs"></div>
+          <div id="formatting-toolbar" class="formatting-toolbar"></div>
+          <div class="editor-content" id="editor-content">
+            <p class="empty-state">Nenhum arquivo selecionado</p>
+          </div>
+        </main>
+
+        <aside class="pane pane-details hidden" id="pane-details">
+          <div class="panel-header">
+            <span>Detalhes</span>
+            <button class="icon-btn" id="close-details">&#x2715;</button>
+          </div>
+          <dl class="details-list" id="details-content"></dl>
+        </aside>
+
+        <aside class="pane pane-chat hidden" id="pane-chat">
+          <div class="panel-header">
+            <span>IA local</span>
+            <button class="icon-btn" id="close-chat">&#x2715;</button>
+          </div>
+          <div class="chat-messages" id="chat-messages"></div>
+          <form class="chat-form" id="chat-form">
+            <input type="text" id="chat-input" placeholder="Pergunte sobre este arquivo…" autocomplete="off" />
+            <button type="submit">&#8593;</button>
+          </form>
+        </aside>
+      </div>
+
+      <div class="context-menu hidden" id="context-menu">
+        <button data-action="rename">Renomear</button>
+        <button data-action="reveal">Abrir no gerenciador de arquivos</button>
+        <hr />
+        <button data-action="trash" class="destructive">Mover para a lixeira</button>
+      </div>
+
+      <div class="modal-overlay hidden" id="palette-overlay">
+        <div class="modal palette-modal">
+          <input type="search" id="palette-input" placeholder="Buscar arquivo, pasta ou comando…" autocomplete="off" />
+          <div id="palette-results" class="palette-results"></div>
+        </div>
+      </div>
+
+      <div class="modal-overlay hidden" id="settings-overlay">
+        <div class="modal settings-modal">
+          <div class="modal-header">
+            <span>Configurações</span>
+          </div>
+          <div class="segmented" id="settings-tabs">
+            <button class="segmented-item active" data-tab="vaults">Cofres</button>
+            <button class="segmented-item" data-tab="preview">Preview e CSP</button>
+            <button class="segmented-item" data-tab="llm">IA / LLM</button>
+          </div>
+          <div class="modal-body">
+            <p class="empty-state" id="settings-body">Conteúdo de exemplo para a aba "Cofres".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
